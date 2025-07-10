@@ -504,7 +504,7 @@ async def registro_menu_callback(update: Update, context: ContextTypes.DEFAULT_T
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         await query.edit_message_text(
-            "🚀 <b>Como cadastrar na NGK Pay?</b> É simples! Basta seguir o tutorial:\n\n"
+            "🚀 <b>Como cadastrar na NGK Pay?</b> É simples! Basta seguir o tutorial:\n"
             "<b>1.</b> Crie um novo Bot no @Botfather\n"
             "<b>2.</b> Copie o Token do Bot\n"
             "<b>3.</b> Cole o Token aqui abaixo",
@@ -561,27 +561,19 @@ async def registro_menu_callback(update: Update, context: ContextTypes.DEFAULT_T
         bots = manager.get_bots_by_owner(str(user_id))
         
         if not bots:
-            await query.edit_message_text(
-                "📭 <b>Nenhum bot para substituir</b>\n\n"
-                "Você precisa ter pelo menos um bot cadastrado para usar esta função.",
-                parse_mode='HTML'
-            )
-            
-            # Botão para voltar ao menu
-            keyboard = [[InlineKeyboardButton("⬅️ VOLTAR", callback_data="registro_voltar_menu")]]
+            # Define o botão ANTES de editar a mensagem
+            keyboard = [[InlineKeyboardButton("🏠 Voltar", callback_data="registro_voltar_menu")]]
             reply_markup = InlineKeyboardMarkup(keyboard)
-            await query.message.edit_reply_markup(reply_markup)
+            
+            await query.edit_message_text(
+                "❌ <b>Nenhum bot para substituir</b>\n\n"
+                "Você precisa ter pelo menos um bot cadastrado para usar esta função.",
+                parse_mode='HTML',
+                reply_markup=reply_markup  # Adiciona o botão junto com o texto
+            )
             return REGISTRO_MENU
         
         # Monta lista de bots para escolher
-        await query.edit_message_text(
-            "🔄 <b>Substituir Bot</b>\n\n"
-            "Selecione o bot que deseja substituir:\n\n"
-            "⚠️ <i>O bot selecionado será desativado e suas configurações "
-            "serão transferidas para o novo bot.</i>",
-            parse_mode='HTML'
-        )
-        
         keyboard = []
         for bot in bots:
             bot_id = bot[0]
@@ -600,7 +592,15 @@ async def registro_menu_callback(update: Update, context: ContextTypes.DEFAULT_T
         
         keyboard.append([InlineKeyboardButton("❌ CANCELAR", callback_data="registro_voltar_menu")])
         reply_markup = InlineKeyboardMarkup(keyboard)
-        await query.message.edit_reply_markup(reply_markup)
+        
+        await query.edit_message_text(
+            "🔄 <b>Substituir Bot</b>\n\n"
+            "Selecione o bot que deseja substituir:\n\n"
+            "⚠️ <i>O bot selecionado será desativado e suas configurações "
+            "serão transferidas para o novo bot.</i>",
+            parse_mode='HTML',
+            reply_markup=reply_markup  # Adiciona o botão junto com o texto
+        )
         
         return REGISTRO_SELECIONAR_BOT
         
