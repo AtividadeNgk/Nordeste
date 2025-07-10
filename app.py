@@ -604,6 +604,33 @@ async def registro_menu_callback(update: Update, context: ContextTypes.DEFAULT_T
         
         return REGISTRO_SELECIONAR_BOT
         
+    elif query.data == "registro_taxas":
+        # Define o botão de voltar
+        keyboard = [[InlineKeyboardButton("🏠 Voltar", callback_data="registro_voltar_menu")]]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await query.edit_message_text(
+            "💰 <b>Nossas Taxas</b>\n\n"
+            "Cobramos apenas <b>5%</b> por transação para manter nossa infraestrutura "
+            "e oferecer o melhor serviço para você!\n\n"
+            "📊 <b>Como funciona:</b>\n"
+            "• Taxa única de 5% sobre cada venda\n"
+            "• Sem mensalidades ou taxas ocultas\n"
+            "• Processamento instantâneo\n\n"
+            "💡 <b>Exemplo prático:</b>\n"
+            "Venda de R$ 19,90 → Taxa de R$ 0,99\n"
+            "Você recebe: R$ 18,91\n\n"
+            "✅ <b>Vantagens:</b>\n"
+            "• Suporte 24/7\n"
+            "• Pagamentos via PIX instantâneo\n"
+            "• Sistema 100% automatizado\n"
+            "• Sem limites de vendas\n\n"
+            "<i>Transparência total para você crescer com segurança!</i>",
+            parse_mode='HTML',
+            reply_markup=reply_markup
+        )
+        return REGISTRO_MENU
+        
     elif query.data == "registro_voltar_menu":
         # Volta ao menu principal
         return await mostrar_menu_principal(query.message, query.from_user)
